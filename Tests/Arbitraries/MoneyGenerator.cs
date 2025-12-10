@@ -13,7 +13,11 @@ namespace WalletPropertyTesting.Tests.Arbitraries
     {
         public static Arbitrary<Money> Money()
         {
-            throw new NotImplementedException();
+            var gen = Gen.Choose(0, 1000000)
+                .Select(i => (decimal)i + (decimal)new Random().NextDouble()) // Додаємо копійки
+                .Select(d => new Money(Math.Round(d, 2))); // Округляємо до 2 знаків
+
+            return Arb.From(gen);
         }
     }
 

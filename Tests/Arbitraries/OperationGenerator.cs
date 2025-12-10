@@ -16,7 +16,15 @@ namespace WalletPropertyTesting.Tests.Arbitraries
     {
         public static Arbitrary<WalletOperation> Operation()
         {
-            throw new NotImplementedException();
+            var genMoney = MoneyGenerator.Money().Generator;
+            var genType = Gen.Elements(WalletOpType.Deposit, WalletOpType.Withdraw);
+
+            var genOperation = 
+                from m in genMoney
+                from t in genType
+                select new WalletOperation(t, m.Amount);
+
+            return Arb.From(genOperation);
 
         }
     }

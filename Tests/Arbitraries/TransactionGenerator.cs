@@ -13,7 +13,14 @@ namespace WalletPropertyTesting.Tests.Arbitraries
     {
         public static Arbitrary<Transaction> Transaction()
         {
-            throw new NotImplementedException();
+            var genMoney = MoneyGenerator.Money().Generator;
+            
+            var genTransaction = Gen.OneOf(
+                genMoney.Select(m => Domain.Transaction.Deposit(m)),
+                genMoney.Select(m => Domain.Transaction.Withdraw(m))
+            );
+
+            return Arb.From(genTransaction);
 
         }
     }
